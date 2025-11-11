@@ -1,3 +1,0 @@
-/media/sf_virtual_box_share/project/build/CMakeFiles/jpeg_text.dir
-/media/sf_virtual_box_share/project/build/CMakeFiles/edit_cache.dir
-/media/sf_virtual_box_share/project/build/CMakeFiles/rebuild_cache.dir
