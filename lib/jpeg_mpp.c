@@ -33,14 +33,15 @@ void test_mpp_jpeg_encoding(void) {
     
     // 配置编码参数
     mpp_enc_cfg_init(&cfg);
+
     mpp_enc_cfg_set_s32(cfg, "prep:width", IMAGE_WIDTH);
     mpp_enc_cfg_set_s32(cfg, "prep:height", IMAGE_HEIGHT);
+    mpp_enc_cfg_set_s32(cfg, "prep:hor_stride",IMAGE_WIDTH_STRIDE);
+    mpp_enc_cfg_set_s32(cfg, "prep:ver_stride",IMAGE_HEIGHT_STRIDE);
     mpp_enc_cfg_set_s32(cfg, "prep:format", MPP_FMT_YUV420SP);  // NV12格式
     mpp_enc_cfg_set_s32(cfg, "jpeg:q_factor", JPEG_QUALITY);    // JPEG质量
 
-
-    
-    mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
+    ret=mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
     // 创建MPP内存池
     ret = mpp_buffer_group_get_internal(&group, MPP_BUFFER_TYPE_ION);
     if (ret != MPP_OK) {
@@ -51,7 +52,7 @@ void test_mpp_jpeg_encoding(void) {
         printf("   MPP内存池创建成功！\n");
     }
 
-    ret =mpp_buffer_group_limit_config(group,YUV_SIZE,NUM_IMAGES);
+    ret =mpp_buffer_group_limit_config(group,buffer_size,NUM_IMAGES);
     if (ret!=MPP_OK){
         printf("   MPP内存池限制失败，请重试！\n");
         return ;
@@ -60,15 +61,17 @@ void test_mpp_jpeg_encoding(void) {
     }
 
 
-    MppBuffer buffer = NULL;
-    MppBuffer buffer2 =NULL;
 
     // 处理每张图像
 
     for (int i = 0; i < NUM_IMAGES; i++) {
         printf("   处理图像IMAGE(%d)...\n", i);
         // 分配MPP缓冲区
-        ret = mpp_buffer_get(group, &buffer, YUV_SIZE);
+        MppBuffer buffer = NULL;
+        MppBuffer buffer2 =NULL;
+        MppPacket packet =NULL;
+        MppFrame  frame =NULL;
+        ret = mpp_buffer_get(group, &buffer, buffer_size);
         if (ret != MPP_OK || !buffer) {
             printf("     MPP缓冲区分配失败");
             printf("     问题是：ret=%d,buffer=%p",ret,buffer);
@@ -104,21 +107,24 @@ void test_mpp_jpeg_encoding(void) {
         }else{
             printf("     YUV读取成功\n");
         }
+                
+
         //printf("     拷贝成功！！\n");
         mpp_buffer_sync_end(buffer);
         printf("     同步结束成功！\n");
 
         // 准备MPP帧
-        MppFrame frame;
         mpp_frame_init(&frame);
         mpp_frame_set_buffer(frame, buffer);
         mpp_frame_set_width(frame, IMAGE_WIDTH);
         mpp_frame_set_height(frame, IMAGE_HEIGHT);
+        mpp_frame_set_hor_stride(frame, IMAGE_HEIGHT_STRIDE);
+        mpp_frame_set_ver_stride(frame,IMAGE_WIDTH_STRIDE);
         mpp_frame_set_fmt(frame, MPP_FMT_YUV420SP);
         printf("     准备MPP帧成功！\n");
  
-        MppPacket packet;
-        ret = mpp_buffer_get(group,&buffer2,YUV_SIZE);
+
+        ret = mpp_buffer_get(group,&buffer2,buffer_size);
         if (ret != MPP_OK || !buffer2) {
             printf("     MPP_packet缓冲区分配失败\n");
             printf("     问题是：ret=%d,buffer2=%p",ret,buffer2);
@@ -129,20 +135,34 @@ void test_mpp_jpeg_encoding(void) {
 
         //给packet分配缓冲区
         void *mpp_ptr2=mpp_buffer_get_ptr(buffer2);
-        ret=mpp_packet_init(packet,mpp_ptr2,YUV_SIZE);
+        ret=mpp_packet_init(packet,mpp_ptr2,buffer_size);
         mpp_packet_init_with_buffer(&packet, buffer2);
 
         // JPEG编码
-        ret=mpi->encode(ctx,frame,packet);
-        //ret=mpi->encode_put_frame(ctx, frame);
+        //ret=mpi->encode(ctx,frame,packet);
+        printf("   准备进行帧提取！\n");
+        ret=mpi->encode_put_frame(ctx, frame);
         if (ret != MPP_OK) {
-            printf("     编码失败: %d \n", ret);
+            printf("     获取帧失败: %d \n", ret);
             free(yuv_data);
             mpp_buffer_put(buffer);
             mpp_frame_deinit(&frame);
             continue;
         }else{
-            printf("     编码成功！\n\n");
+            printf("     获取帧成功！\n\n");
+            
+        }
+        
+        printf("   准备进行包提取！\n");
+        ret=mpi->encode_get_packet(ctx,packet);
+        if (ret != MPP_OK) {
+            printf("     获取包失败: %d \n", ret);
+            free(yuv_data);
+            mpp_buffer_put(buffer);
+            mpp_frame_deinit(&frame);
+            continue;
+        }else{
+            printf("     获取包成功！\n\n");
             
         }
 

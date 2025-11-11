@@ -80,10 +80,10 @@ void diagnose_save_failure(const char* filename, const void* data, size_t size) 
         close(test_fd);
         
         if (written == strlen(test_data)) {
-            printf("   ✅ 测试文件创建成功\n");
+            printf("   ✅ 测试文件创建成功\n\n");
             unlink(test_file); // 清理测试文件
         } else {
-            printf("   ❌❌ 测试文件写入失败: %s (%s)\n", test_file, strerror(errno));
+            printf("   ❌❌ 测试文件写入失败: %s (%s)\n\n", test_file, strerror(errno));
         }
     }
 }
@@ -194,9 +194,9 @@ int readmpp_yuv_file(const char* filename, void** buffer) {
 
 // 写入数据到文件
 int write_data_to_file(const char* filename, const void* data, size_t size) {
-    printf("     正在将jpeg格式写入进文件！！\n");
+    printf("     正在将jpeg格式写入进文件！！\n\n");
     int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    printf("     正在打开文件！！\n");
+    printf("     正在打开文件！！\n\n");
     if (fd < 0) {
         printf("     无法创建输出文件 %s: %s\n", filename, strerror(errno));
         return -1;

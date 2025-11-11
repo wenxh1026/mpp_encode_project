@@ -19,11 +19,14 @@
 #define _XOPEN_SOURCE 700        // 启用X/Open 7特性
 
 // 图像参数定义
-#define IMAGE_WIDTH   3840
-#define IMAGE_HEIGHT  2160
+#define IMAGE_WIDTH   1920
+#define IMAGE_HEIGHT  1080
 #define YUV_SIZE      (IMAGE_WIDTH * IMAGE_HEIGHT * 3 / 2)  // NV12格式
 #define NUM_IMAGES    5
 #define JPEG_QUALITY  80
+#define buffer_size   YUV_SIZE+1920*4
+#define IMAGE_WIDTH_STRIDE 1920
+#define IMAGE_HEIGHT_STRIDE 1080
 
 extern const char* yuv_files[NUM_IMAGES];
 extern const char* jpeg_files[NUM_IMAGES];

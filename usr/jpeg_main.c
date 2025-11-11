@@ -6,9 +6,9 @@
 int main() {
     // 测试编码性能
     //MPP内存管理 + 硬件JPEG编码
-    //printf("=== RK3562 JPEG编解码性能对比测试 ===\n");
-    //printf("测试图像: %dx%d, 数量: %d, JPEG质量: %d\n\n", IMAGE_WIDTH, IMAGE_HEIGHT, NUM_IMAGES, JPEG_QUALITY);
-    //printf("   进行MPP性能测试！\n");
+    printf("=== RK3562 JPEG编解码性能对比测试 ===\n");
+    printf("测试图像: %dx%d, 数量: %d, JPEG质量: %d\n\n", IMAGE_WIDTH, IMAGE_HEIGHT, NUM_IMAGES, JPEG_QUALITY);
+    printf("   进行MPP性能测试！\n");
 
     test_mpp_jpeg_encoding(); 
     //纯软件内存 + 硬件JPEG编码
