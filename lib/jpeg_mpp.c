@@ -38,6 +38,8 @@ void test_mpp_jpeg_encoding(void) {
     mpp_enc_cfg_set_s32(cfg, "prep:format", MPP_FMT_YUV420SP);  // NV12格式
     mpp_enc_cfg_set_s32(cfg, "jpeg:q_factor", JPEG_QUALITY);    // JPEG质量
 
+
+    
     mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
     // 创建MPP内存池
     ret = mpp_buffer_group_get_internal(&group, MPP_BUFFER_TYPE_ION);
