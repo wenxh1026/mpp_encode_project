@@ -152,7 +152,7 @@ void test_mpp_jpeg_encoding(void) {
             printf("     获取帧成功！\n\n");
             
         }
-        
+
         printf("   准备进行包提取！\n");
         ret=mpi->encode_get_packet(ctx,packet);
         if (ret != MPP_OK) {
@@ -178,6 +178,7 @@ void test_mpp_jpeg_encoding(void) {
         } else {
             printf("     ❌❌ 保存失败\n\n");
             diagnose_save_failure(jpeg_files[i], jpeg_data, jpeg_size);
+            diagnose_write_failure(jpeg_files[i], jpeg_size);
         }
           
         double end_time = get_us_time();       
@@ -378,8 +379,6 @@ void test_software_jpeg_encoding(void) {
             printf("     ❌❌ 保存失败\n\n");
             diagnose_save_failure(jpeg_files[i], jpeg_data, jpeg_size);
         }
-        
-             
         
     
         double end_time = get_us_time();       

@@ -26,6 +26,7 @@ const char* jpeg_sw_files[NUM_IMAGES] = {
     "/root/MPP_text/output_sw4.jpg"
 };
 
+
 void diagnose_save_failure(const char* filename, const void* data, size_t size) {
     printf("   === 保存失败诊断 ===\n");
     
