@@ -1,0 +1,14 @@
+# CMake 构建文件
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+!*.cmake.in
+
+out/
+# 其他可能的构建目录名称
+cmake-build-*/
+Debug/
+Release/
