@@ -4,6 +4,12 @@ cmake_minimum_required(VERSION 3.10)
 #设置SDK路径
 set(SDK "/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/usr/aarch64-buildroot-linux-gnu/sysroot")
 
+# 设置目标输出目录到指定路径
+set(TARGET_OUTPUT_DIR "/media/sf_virtual_box_share/output/bin")
+
+# 确保输出目录存在[3](@ref)
+file(MAKE_DIRECTORY ${TARGET_OUTPUT_DIR})
+
 #设置编译器路径
 set(CMAKE_C_COMPILER /home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/bin/aarch64-buildroot-linux-gnu-gcc)
 set(CMAKE_CXX_COMPILER /home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/bin/aarch64-buildroot-linux-gnu-g++)
@@ -36,16 +42,18 @@ set(LIBS rockchip_mpp pthread)
 add_executable(jpeg_text ${SOURCE_FILES})  
 # 链接库到可执行文件
 target_link_libraries(jpeg_text ${LIBS})
-# 设置 C++ 标准为 C++11
+# 设置 C++ 标准为 C++11,并将可执行文件输出到指定目录[2,6](@ref)
 set_target_properties(jpeg_text PROPERTIES
     C_STANDARD 11
     C_STANDARD_REQUIRED ON
+    RUNTIME_OUTPUT_DIRECTORY ${TARGET_OUTPUT_DIR}
 )
+
 
 message(STATUS "==========================================")
 message(STATUS "项目: ${PROJECT_NAME}")
 message(STATUS "版本: ${PROJECT_VERSION}")
-
+message(STATUS "输出目录: ${TARGET_OUTPUT_DIR}")
 foreach(file ${SOURCE_FILES})
     message(STATUS "  - ${file}")
 endforeach()
