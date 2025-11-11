@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "pthread.h": "c",
+        "mman.h": "c",
+        "jpeg_utils.h": "c",
+        "fcntl.h": "c",
+        "stdio.h": "c",
+        "mpp_buffer.h": "c",
+        "rk_type.h": "c",
+        "jpeg_function.h": "c",
+        "jpeg_mpp.h": "c"
+    }
+}

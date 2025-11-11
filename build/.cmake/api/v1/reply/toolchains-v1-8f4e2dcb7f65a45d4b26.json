@@ -1,0 +1,54 @@
+{
+	"kind" : "toolchains",
+	"toolchains" : 
+	[
+		{
+			"compiler" : 
+			{
+				"id" : "GNU",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/lib/gcc/aarch64-buildroot-linux-gnu/12.3.0/include",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/lib/gcc/aarch64-buildroot-linux-gnu/12.3.0/include-fixed",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/aarch64-buildroot-linux-gnu/include",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/aarch64-buildroot-linux-gnu/sysroot/usr/include"
+					],
+					"linkDirectories" : 
+					[
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/lib/gcc/aarch64-buildroot-linux-gnu/12.3.0",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/aarch64-buildroot-linux-gnu/lib64",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/aarch64-buildroot-linux-gnu/sysroot/lib64",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib64",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/aarch64-buildroot-linux-gnu/lib",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/aarch64-buildroot-linux-gnu/sysroot/lib",
+						"/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib"
+					],
+					"linkFrameworkDirectories" : [],
+					"linkLibraries" : 
+					[
+						"gcc",
+						"gcc_s",
+						"c",
+						"gcc",
+						"gcc_s"
+					]
+				},
+				"path" : "/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/bin/aarch64-buildroot-linux-gnu-gcc",
+				"version" : "12.3.0"
+			},
+			"language" : "C",
+			"sourceFileExtensions" : 
+			[
+				"c",
+				"m"
+			]
+		}
+	],
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

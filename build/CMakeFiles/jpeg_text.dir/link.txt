@@ -1,0 +1,1 @@
+/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/bin/aarch64-buildroot-linux-gnu-gcc  -Wall -O0 -g -std=c11 -DDEBUG -g CMakeFiles/jpeg_text.dir/usr/jpeg_main.c.o CMakeFiles/jpeg_text.dir/lib/jpeg_function.c.o CMakeFiles/jpeg_text.dir/lib/jpeg_mpp.c.o -o jpeg_text  -lrockchip_mpp -lpthread 

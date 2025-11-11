@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/media/sf_virtual_box_share/project/build",
+  "command": "/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/bin/aarch64-buildroot-linux-gnu-gcc  -I/media/sf_virtual_box_share/project/inc  -Wall -O0 -g -std=c11 -DDEBUG -g -std=gnu11 -o CMakeFiles/jpeg_text.dir/usr/jpeg_main.c.o -c /media/sf_virtual_box_share/project/usr/jpeg_main.c",
+  "file": "/media/sf_virtual_box_share/project/usr/jpeg_main.c",
+  "output": "CMakeFiles/jpeg_text.dir/usr/jpeg_main.c.o"
+},
+{
+  "directory": "/media/sf_virtual_box_share/project/build",
+  "command": "/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/bin/aarch64-buildroot-linux-gnu-gcc  -I/media/sf_virtual_box_share/project/inc  -Wall -O0 -g -std=c11 -DDEBUG -g -std=gnu11 -o CMakeFiles/jpeg_text.dir/lib/jpeg_function.c.o -c /media/sf_virtual_box_share/project/lib/jpeg_function.c",
+  "file": "/media/sf_virtual_box_share/project/lib/jpeg_function.c",
+  "output": "CMakeFiles/jpeg_text.dir/lib/jpeg_function.c.o"
+},
+{
+  "directory": "/media/sf_virtual_box_share/project/build",
+  "command": "/home/tronlong/RK3562/rk3562_linux_sdk_release/buildroot/output/rockchip_rk3562/host/bin/aarch64-buildroot-linux-gnu-gcc  -I/media/sf_virtual_box_share/project/inc  -Wall -O0 -g -std=c11 -DDEBUG -g -std=gnu11 -o CMakeFiles/jpeg_text.dir/lib/jpeg_mpp.c.o -c /media/sf_virtual_box_share/project/lib/jpeg_mpp.c",
+  "file": "/media/sf_virtual_box_share/project/lib/jpeg_mpp.c",
+  "output": "CMakeFiles/jpeg_text.dir/lib/jpeg_mpp.c.o"
+}
+]
