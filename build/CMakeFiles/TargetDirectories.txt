@@ -1,3 +1,0 @@
-/home/wxh/桌面/mpp_encode_project/build/CMakeFiles/jpeg_text.dir
-/home/wxh/桌面/mpp_encode_project/build/CMakeFiles/edit_cache.dir
-/home/wxh/桌面/mpp_encode_project/build/CMakeFiles/rebuild_cache.dir
