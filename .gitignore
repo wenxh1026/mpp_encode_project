@@ -6,7 +6,7 @@ cmake_install.cmake
 Makefile
 *.cmake
 !*.cmake.in
-
+!CMakeList.txt
 out/
 # 其他可能的构建目录名称
 cmake-build-*/

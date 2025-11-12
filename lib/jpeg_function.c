@@ -195,26 +195,86 @@ int readmpp_yuv_file(const char* filename, void** buffer) {
 
 // 写入数据到文件
 int write_data_to_file(const char* filename, const void* data, size_t size) {
-    printf("     正在将jpeg格式写入进文件！！\n\n");
-    int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    printf("     正在打开文件！！\n\n");
-    if (fd < 0) {
-        printf("     无法创建输出文件 %s: %s\n", filename, strerror(errno));
+    printf("   正在将JPEG格式写入文件...\n");
+    
+    // 1. 检查输入参数
+    if (!filename || !data || size == 0) {
+        printf("     ❌ 无效的输入参数: filename=%p, data=%p, size=%zu\n", 
+               filename, data, size);
         return -1;
-    }else{
-        printf("     打开成功！！\n");
     }
-    printf("     准备写入的字节为%ld\n",size);
-    ssize_t bytes_written = write(fd, data, size);
-    if (fsync(fd) < 0) {
-    printf("   ⚠⚠⚠️  fsync失败: %s (数据可能未完全持久化)\n", strerror(errno));
-    // 不立即返回失败，因为数据可能已写入缓存
-    }else{
-        printf("     fsync成功！！\n");
-    }  
-    close(fd);
-    printf("     写入的字节数为%ld\n",bytes_written);
-    return (bytes_written == size) ? 0 : -1;
+    
+    // 2. 检查数据有效性
+    printf("     检查数据有效性...\n");
+    if (size >= 2) {
+        unsigned char* jpeg_data = (unsigned char*)data;
+        if (jpeg_data[0] == 0xFF && jpeg_data[1] == 0xD8) {
+            printf("     ✅ 有效的JPEG文件头 (FF D8)\n");
+        } else {
+            printf("     ❌ 无效的JPEG文件头: %02X %02X\n", jpeg_data[0], jpeg_data[1]);
+            printf("     可能不是有效的JPEG数据\n");
+        }
+    }
+    
+    // 3. 打开文件 (使用fopen代替open)
+    printf("     打开文件: %s\n", filename);
+    FILE* file = fopen(filename, "wb");  // "wb" = 二进制写模式
+    if (!file) {
+        printf("     ❌ 无法创建文件: %s (errno: %d - %s)\n", 
+               filename, errno, strerror(errno));
+        return -1;
+    }
+    printf("     ✅ 文件打开成功\n");
+    
+    // 4. 写入数据 (使用fwrite代替write)
+    printf("     准备写入: %zu 字节\n", size);
+    size_t bytes_written = fwrite(data, 1, size, file);
+    
+    // 5. 检查写入结果
+    if (bytes_written != size) {
+        // 写入失败或不完整
+        if (ferror(file)) {
+            printf("     ❌ 写入失败: %s\n", strerror(errno));
+        } else {
+            printf("     ❌ 写入不完整: %zu/%zu 字节\n", bytes_written, size);
+        }
+        fclose(file);
+        return -1;
+    }
+    
+    printf("     ✅ 数据写入成功: %zu 字节\n", bytes_written);
+    
+    // 6. 刷新缓冲区确保数据写入磁盘
+    if (fflush(file) != 0) {
+        printf("     ⚠️  缓冲区刷新警告: %s\n", strerror(errno));
+    } else {
+        printf("     ✅ 缓冲区刷新成功\n");
+    }
+    
+    // 7. 关闭文件 (使用fclose代替close)
+    if (fclose(file) != 0) {
+        printf("     ⚠️  文件关闭警告: %s\n", strerror(errno));
+        return -1;
+    }
+    
+    printf("     ✅ 文件关闭成功\n");
+    
+    // 8. 验证文件实际大小
+    FILE* verify_file = fopen(filename, "rb");
+    if (verify_file) {
+        fseek(verify_file, 0, SEEK_END);
+        long file_size = ftell(verify_file);
+        fclose(verify_file);
+        
+        printf("     ✅ 文件验证成功: 实际大小 %ld 字节\n", file_size);
+        if (file_size != size) {
+            printf("     ⚠️  大小不匹配: 期望 %zu, 实际 %ld\n", size, file_size);
+            return -1;
+        }
+    }
+    
+    printf("     ✅ 文件保存完成: %s\n", filename);
+    return 0;
 }
 
 //MPP缓冲区状态函数

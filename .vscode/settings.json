@@ -8,6 +8,7 @@
         "mpp_buffer.h": "c",
         "rk_type.h": "c",
         "jpeg_function.h": "c",
-        "jpeg_mpp.h": "c"
+        "jpeg_mpp.h": "c",
+        "unistd.h": "c"
     }
 }
