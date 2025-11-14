@@ -51,7 +51,7 @@ void test_mpp_jpeg_encoding(void) {
         printf("   MPP内存池创建成功！\n");
     }
 
-    ret =mpp_buffer_group_limit_config(group,buffer_size,NUM_IMAGES);
+    ret =mpp_buffer_group_limit_config(group,buffer_size,NUM_IMAGES+1);
     if (ret!=MPP_OK){
         printf("   MPP内存池限制失败，请重试！\n");
         return ;
@@ -70,6 +70,8 @@ void test_mpp_jpeg_encoding(void) {
         MppBuffer buffer2 =NULL;
         MppPacket packet =NULL;
         MppFrame  frame =NULL;
+        unsigned char* yuv_data  =NULL;
+        // 给帧分配MPP缓冲区
         ret = mpp_buffer_get(group, &buffer, buffer_size);
         if (ret != MPP_OK || !buffer) {
             printf("   MPP缓冲区分配失败");
@@ -78,15 +80,21 @@ void test_mpp_jpeg_encoding(void) {
         }else{
             printf("   MPP缓冲区分配成功!\n");
         }
-        unsigned char* yuv_data = NULL;
-        // 读取YUV数据到MPP缓冲区
 
-        // 检查MPP缓冲区状态的函数
-        
-        // 将数据复制到MPP缓冲区
+        // 给packet分配缓冲区
+        ret = mpp_buffer_get(group,&buffer2,buffer_size);
+        if (ret != MPP_OK || !buffer2) {
+            printf("   MPP_packet缓冲区分配失败\n");
+            printf("   问题是：ret=%d,buffer2=%p",ret,buffer2);
+            continue;
+        }else{
+            printf("   MPP_packet缓冲区分配成功!\n");
+        }
+
+
+        //开始性能测试！
         double start_time = get_us_time();
         void* mpp_ptr = mpp_buffer_get_ptr(buffer);
-
         if (!mpp_ptr) {
             printf("   无法获取MPP缓冲区指针\n");
             mpp_buffer_put(buffer);
@@ -95,7 +103,17 @@ void test_mpp_jpeg_encoding(void) {
             printf("   成功获取MPP缓冲区指针\n");
             printf("   mpp_ptr的地址为：%p\n",mpp_ptr);
         }
-        
+ 
+        void *mpp_ptr2=mpp_buffer_get_ptr(buffer2);
+        if (!mpp_ptr2) {
+            printf("   无法获取MPP缓冲区指针\n");
+            mpp_buffer_put(buffer);
+            continue;
+        }else{
+            printf("   成功获取MPP缓冲区指针\n");
+            printf("   mpp_ptr2的地址为：%p\n",mpp_ptr2);
+        }
+
         printf("   尝试内存同步\n");
         mpp_buffer_sync_begin(buffer);
         printf("   同步开始成功！！\n");
@@ -124,25 +142,7 @@ void test_mpp_jpeg_encoding(void) {
         printf("   准备MPP帧成功！\n");
  
 
-        ret = mpp_buffer_get(group,&buffer2,buffer_size);
-        if (ret != MPP_OK || !buffer2) {
-            printf("   MPP_packet缓冲区分配失败\n");
-            printf("   问题是：ret=%d,buffer2=%p",ret,buffer2);
-            continue;
-        }else{
-            printf("   MPP_packet缓冲区分配成功!\n");
-        }
 
-        //给packet分配缓冲区
-        void *mpp_ptr2=mpp_buffer_get_ptr(buffer2);
-        if (!mpp_ptr2) {
-            printf("   无法获取MPP缓冲区指针\n");
-            mpp_buffer_put(buffer);
-            continue;
-        }else{
-            printf("   成功获取MPP缓冲区指针\n");
-            printf("   mpp_ptr2的地址为：%p\n",mpp_ptr2);
-        }
         
         ret=mpp_packet_init(packet,mpp_ptr2,buffer_size);
         mpp_packet_init_with_buffer(&packet, buffer2);
@@ -176,7 +176,7 @@ void test_mpp_jpeg_encoding(void) {
         }
 
         void* jpeg_data = mpp_packet_get_data(packet);
-        printf("    packet指针的位置在：%p",jpeg_data);
+        printf("   packet指针的位置在：%p",jpeg_data);
         size_t jpeg_size = mpp_packet_get_length(packet);
 
         printf("   此次JPEG图像大小为：%ld\n",jpeg_size);
@@ -229,6 +229,7 @@ void test_mpp_jpeg_encoding(void) {
     printf("   平均每图像处理时间: %.2f ms\n", total_time / NUM_IMAGES);
     printf("   理论帧率: %.1f FPS\n\n", 1000.0 / (total_time / NUM_IMAGES));
 }
+
 /*
 // 使用纯软件内存管理进行硬件JPEG编码
 void test_software_jpeg_encoding(void) {
@@ -477,7 +478,7 @@ void test_pure_software_jpeg(void) {
         char cmd[512];
         snprintf(cmd, sizeof(cmd), 
                  "ffmpeg -f rawvideo -pix_fmt nv12 -s %dx%d -i - -qscale %d -y %s 2>/dev/null",
-                 IMAGE_WIDTH, IMAGE_HEIGHT, JPEG_QUALITY, jpeg_sw_files[i]);
+                 IMAGE_WIDTH, IMAGE_HEIGHT, JPEG_QUALITY_FFMPEG, jpeg_sw_files[i]);
         printf("   执行命令: %s\n", cmd);
         FILE* ffmpeg = popen(cmd, "w");
         if (!ffmpeg) {

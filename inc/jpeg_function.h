@@ -27,6 +27,7 @@
 #define buffer_size   YUV_SIZE+1920*4
 #define IMAGE_WIDTH_STRIDE 1920
 #define IMAGE_HEIGHT_STRIDE 1080
+#define JPEG_QUALITY_FFMPEG 80
 
 extern const char* yuv_files[NUM_IMAGES];
 extern const char* jpeg_files[NUM_IMAGES];
